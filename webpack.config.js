@@ -9,8 +9,7 @@ module.exports = {
 
   output: {
     path: path.join(rootPath, 'build'),
-    filename: 'bundle.js',
-    libraryTarget: 'commonjs2'
+    filename: 'bundle.js'
   },
 
   resolve: {
@@ -18,9 +17,9 @@ module.exports = {
   },
 
   devServer: {
-    contentBase: path.join(__dirname, "dist"),
+    contentBase: path.join(__dirname, "build"),
     compress: true,
-    port: 9000
+    port: 9001
   },
 
   module: {
