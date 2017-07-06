@@ -9795,17 +9795,27 @@ var StatusList = function (_React$PureComponent) {
         var _this = _possibleConstructorReturn(this, (StatusList.__proto__ || Object.getPrototypeOf(StatusList)).call(this, props));
 
         _this.state = { name: _this.props.name, data: [] };
-        _this.getData();
         return _this;
     }
 
     _createClass(StatusList, [{
-        key: 'getData',
-        value: function getData() {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
             var _this2 = this;
 
+            this.getData();
+            setInterval(function () {
+                return _this2.getData();
+            }, 10000);
+        }
+    }, {
+        key: 'getData',
+        value: function getData() {
+            var _this3 = this;
+
+            console.log("Getting data");
             (0, _utilities2.default)().then(function (data) {
-                _this2.setState({ data: data });
+                _this3.setState({ data: data });
             }).catch();
         }
     }, {
@@ -9814,6 +9824,55 @@ var StatusList = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 { className: 'menu' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'row' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'service column' },
+                        _react2.default.createElement(
+                            'h1',
+                            null,
+                            'SERVICE'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'branch column' },
+                        _react2.default.createElement(
+                            'h1',
+                            null,
+                            'BRANCH'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'commit column' },
+                        _react2.default.createElement(
+                            'h1',
+                            null,
+                            'COMMIT'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'time column' },
+                        _react2.default.createElement(
+                            'h1',
+                            null,
+                            'TIME'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'status column' },
+                        _react2.default.createElement(
+                            'h1',
+                            null,
+                            'STATUS'
+                        )
+                    )
+                ),
                 this.state.data.map(function (item, idx) {
                     return _react2.default.createElement(StatusItem, { key: idx, service: item.service, info: item.info });
                 })
@@ -9830,10 +9889,10 @@ var StatusItem = function (_React$PureComponent2) {
     function StatusItem(props) {
         _classCallCheck(this, StatusItem);
 
-        var _this3 = _possibleConstructorReturn(this, (StatusItem.__proto__ || Object.getPrototypeOf(StatusItem)).call(this, props));
+        var _this4 = _possibleConstructorReturn(this, (StatusItem.__proto__ || Object.getPrototypeOf(StatusItem)).call(this, props));
 
-        _this3.state = { service: _this3.props.service, info: _this3.props.info };
-        return _this3;
+        _this4.state = { service: _this4.props.service, info: _this4.props.info };
+        return _this4;
     }
 
     _createClass(StatusItem, [{
@@ -9849,27 +9908,27 @@ var StatusItem = function (_React$PureComponent2) {
                     { className: 'row' },
                     _react2.default.createElement(
                         'div',
-                        null,
+                        { className: 'service column' },
                         service
                     ),
                     _react2.default.createElement(
                         'div',
-                        null,
+                        { className: 'branch column' },
                         info.git.branch
                     ),
                     _react2.default.createElement(
                         'div',
-                        null,
+                        { className: 'commit column' },
                         info.git.commit.id
                     ),
                     _react2.default.createElement(
                         'div',
-                        null,
+                        { className: 'time column' },
                         info.git.commit.time
                     ),
                     _react2.default.createElement(
                         'div',
-                        null,
+                        { className: 'status column' },
                         'ACTIVE'
                     )
                 );
@@ -9877,14 +9936,21 @@ var StatusItem = function (_React$PureComponent2) {
             return _react2.default.createElement(
                 'div',
                 { className: 'row' },
-                _react2.default.createElement('div', null),
-                _react2.default.createElement('div', null),
-                _react2.default.createElement('div', null),
-                _react2.default.createElement('div', null),
                 _react2.default.createElement(
                     'div',
-                    null,
+                    { className: 'service column' },
+                    service
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'error column' },
+                    'ERROR: ',
                     info
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'status column' },
+                    'INACTIVE'
                 )
             );
         }
@@ -12399,19 +12465,6 @@ function fetchAPIStatus() {
         });
     });
 }
-
-/*
-
-function tick() {
-  ReactDOM.render(
-    <Clock date={new Date()} />,
-    document.getElementById('root')
-  );
-}
-
-setInterval(tick, 1000);
-
- */
 
 /***/ }),
 /* 100 */
@@ -22614,7 +22667,7 @@ exports = module.exports = __webpack_require__(188)(undefined);
 
 
 // module
-exports.push([module.i, "* {\n\tmargin: 0;\n\tpadding: 0;\n}\n\n.menu{\n    display: flex;\n    flex-direction: column;\n}\n\n.row{\n    flex-direction: row;\n    width: 100%;\n    display: flex;\n}\n\n.row div{\n    width: 20%;\n}", ""]);
+exports.push([module.i, "* {\n\tmargin: 0;\n\tpadding: 0;\n    font-family: Verdana, sans-serif;\n    font-size: 16px;\n    font-weight: 300;\n    text-rendering: optimizeLegibility;\n}\n\n.menu{\n    display: flex;\n    flex-direction: column;\n    margin: 20px;\n}\n\n.row{\n    flex-direction: row;\n    width: 100%;\n    display: flex;\n    height: 100px;\n}\n\n.column{\n    align-items: center;\n    display: flex;    \n    margin: 5px;\n}\n\nh1 {\n    font-weight: 300;\n\tletter-spacing: 1px;\n    word-spacing: 3px;\n\tmargin: 0 0 20px 0;\n\tfont-size: 200%;\n}\n\nh2 {\n\tfont-size: 180%;\n\tword-spacing: 2px;\n\ttext-align: center;\n\tmargin-bottom: 30px;\n}\n\nh3 {\n\tfont-size: 110%;\n\tmargin-bottom: 15px;\n}\n\n.service{\n    width: 30%;\n}\n\n.branch{\n    width: 20%;\n}\n\n.commit{\n    width: 20%;\n}\n\n.time{\n    width: 20%;\n}\n\n.status{\n    width: 10%;\n}\n\n.error{\n    width: 60%;\n    background-color: red;\n    justify-content: center;\n}", ""]);
 
 // exports
 
