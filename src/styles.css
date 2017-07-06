@@ -1,0 +1,19 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.menu{
+    display: flex;
+    flex-direction: column;
+}
+
+.row{
+    flex-direction: row;
+    width: 100%;
+    display: flex;
+}
+
+.row div{
+    width: 20%;
+}

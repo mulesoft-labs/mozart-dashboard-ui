@@ -1,31 +1,63 @@
 import React from 'react';
-import fetchTest from './utilities';
+import fetchAPIStatus from './utilities';
 import { render } from 'react-dom';
-
-const styles = {
-  fontFamily: 'sans-serif',
-  textAlign: 'center',
-};
+import "./styles.css";
 
 const App = () => (
-  <div style={styles}>
-    <Hello name="Jonathan" />
-    <h2>Start editing to see some magic happen {'\u2728'}</h2>
-    <Test/>
-  </div>
+    <div>
+        <StatusList/>
+    </div>
 );
 
-class Test extends React.PureComponent{
+class StatusList extends React.PureComponent{
+    constructor(props){
+        super(props);
+        this.state = { name: this.props.name, data: [] }
+        this.getData();
+    }
+
+    getData(){
+        fetchAPIStatus().then((data) => {
+            this.setState({ data });
+        }).catch();
+    }
+
     render(){
         return (
-            <h2>This is a test {fetchTest()}</h2>
+            <div className="menu">
+                { this.state.data.map((item, idx) => <StatusItem key={idx} service={item.service} info={item.info}/> )}
+            </div>
         );
     }
 }
 
-const Hello = (props) => (
-    <h1>Hello {props.name}!</h1>
-);
+class StatusItem extends React.PureComponent{
+    constructor(props){
+        super(props);
+        this.state = { service: this.props.service, info: this.props.info }
+    }
+
+    render() {
+        const { info } = this.props;
+        const { service } = this.props;
+
+        if (info.git && info.git.commit) {
+            return (<div className="row">
+                        <div>{ service }</div>
+                        <div>{ info.git.branch }</div>
+                        <div>{ info.git.commit.id }</div>
+                        <div>{ info.git.commit.time }</div>
+                        <div>ACTIVE</div>
+                    </div>);
+        }
+        return (<div className="row">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div>{ info }</div>
+                </div>);
+    };
+}
 
 render(<App />, document.getElementById('root'));
-
