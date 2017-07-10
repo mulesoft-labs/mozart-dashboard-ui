@@ -1,12 +1,16 @@
 export var Sources = {
-    DEVX : "https://devx.anypoint.mulesoft.com/designcenter/api/v1/info",
-    QAX : "https://qax.anypoint.mulesoft.com/designcenter/api/v1/info",
-    STGX : "https://stgx.anypoint.mulesoft.com/designcenter/api/v1/info"
-}
-
-export function extend(obj, src){
-    Object.keys(src).forEach(function(key) { obj[key] = src[key]; });
-    return obj;
+    DEVX : {
+        url: "https://devx.anypoint.mulesoft.com/designcenter/api/v1/info",
+        name: "devx"
+    },
+    QAX : {
+        url: "https://qax.anypoint.mulesoft.com/designcenter/api/v1/info",
+        name: "qax"
+    },
+    STGX : {
+        url: "https://stgx.anypoint.mulesoft.com/designcenter/api/v1/info",
+        name: "stgx"
+    }
 }
 
 export function fetchAPIStatus(props){
