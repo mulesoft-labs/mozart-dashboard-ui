@@ -9764,8 +9764,6 @@ var _react2 = _interopRequireDefault(_react);
 
 var _utilities = __webpack_require__(99);
 
-var _utilities2 = _interopRequireDefault(_utilities);
-
 var _reactDom = __webpack_require__(100);
 
 __webpack_require__(186);
@@ -9794,7 +9792,9 @@ var StatusList = function (_React$PureComponent) {
 
         var _this = _possibleConstructorReturn(this, (StatusList.__proto__ || Object.getPrototypeOf(StatusList)).call(this, props));
 
-        _this.state = { name: _this.props.name, data: [] };
+        _this.state = {
+            data: {}
+        };
         return _this;
     }
 
@@ -9807,75 +9807,140 @@ var StatusList = function (_React$PureComponent) {
             setInterval(function () {
                 return _this2.getData();
             }, 10000);
+            this.setState({
+                data: {}
+            });
         }
     }, {
         key: 'getData',
         value: function getData() {
             var _this3 = this;
 
-            console.log("Getting data");
-            (0, _utilities2.default)().then(function (data) {
-                _this3.setState({ data: data });
+            console.log("Getting data...");
+
+            (0, _utilities.fetchAPIStatus)(_utilities.Sources.QAX).then(function (fetchedData) {
+                console.log("Got QAX");
+                var mappedData = fetchedData.reduce(function (acc, val) {
+                    var startOfName = val.service.indexOf("://") + 3;
+                    var endOfName = val.service.indexOf(".");
+                    var res = val.service.substring(startOfName, endOfName);
+
+                    acc[res] = {};
+                    acc[res]["qax"] = val;
+                    return acc;
+                }, {});
+
+                _this3.extendData(mappedData);
             }).catch();
+
+            (0, _utilities.fetchAPIStatus)(_utilities.Sources.DEVX).then(function (fetchedData) {
+                console.log("Got DEVX");
+                var mappedData = fetchedData.reduce(function (acc, val) {
+                    var startOfName = val.service.indexOf("://") + 3;
+                    var endOfName = val.service.indexOf(".");
+                    var res = val.service.substring(startOfName, endOfName);
+
+                    acc[res] = {};
+                    acc[res]["devx"] = val;
+                    return acc;
+                }, {});
+
+                _this3.extendData(mappedData);
+            }).catch();
+
+            (0, _utilities.fetchAPIStatus)(_utilities.Sources.STGX).then(function (fetchedData) {
+                console.log("Got STGX");
+                var mappedData = fetchedData.reduce(function (acc, val) {
+                    var startOfName = val.service.indexOf("://") + 3;
+                    var endOfName = val.service.indexOf(".");
+                    var res = val.service.substring(startOfName, endOfName);
+
+                    acc[res] = {};
+                    acc[res]["stgx"] = val;
+                    return acc;
+                }, {});
+
+                _this3.extendData(mappedData);
+            }).catch();
+        }
+    }, {
+        key: 'extendData',
+        value: function extendData(props) {
+            var data = this.state.data;
+            Object.keys(props).forEach(function (key) {
+                if (data[key] == null) {
+                    data[key] = {};
+                }
+                var test = (0, _utilities.extend)(data[key], props[key]);
+                data[key] = test;
+            });
+            this.setState({ data: data });
+            console.log(JSON.stringify(data));
         }
     }, {
         key: 'render',
         value: function render() {
-            return _react2.default.createElement(
-                'div',
-                { className: 'menu' },
-                _react2.default.createElement(
+            //console.log('render', this.state.matrix.length);
+
+            if (false) {
+                return _react2.default.createElement(
                     'div',
-                    { className: 'row' },
+                    { className: 'menu' },
                     _react2.default.createElement(
                         'div',
-                        { className: 'service column' },
+                        { className: 'row' },
                         _react2.default.createElement(
-                            'h1',
-                            null,
-                            'SERVICE'
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'branch column' },
+                            'div',
+                            { className: 'service column' },
+                            _react2.default.createElement(
+                                'h1',
+                                null,
+                                'Service'
+                            )
+                        ),
                         _react2.default.createElement(
-                            'h1',
-                            null,
-                            'BRANCH'
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'commit column' },
+                            'div',
+                            { className: 'status column' },
+                            _react2.default.createElement(
+                                'h1',
+                                null,
+                                'DEVx'
+                            )
+                        ),
                         _react2.default.createElement(
-                            'h1',
-                            null,
-                            'COMMIT'
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'time column' },
+                            'div',
+                            { className: 'status column' },
+                            _react2.default.createElement(
+                                'h1',
+                                null,
+                                'QAx'
+                            )
+                        ),
                         _react2.default.createElement(
-                            'h1',
-                            null,
-                            'TIME'
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'status column' },
+                            'div',
+                            { className: 'status column' },
+                            _react2.default.createElement(
+                                'h1',
+                                null,
+                                'STGx'
+                            )
+                        ),
                         _react2.default.createElement(
-                            'h1',
-                            null,
-                            'STATUS'
+                            'div',
+                            { className: 'status column' },
+                            _react2.default.createElement(
+                                'h1',
+                                null,
+                                'PROD'
+                            )
                         )
                     )
-                ),
-                this.state.data.map(function (item, idx) {
-                    return _react2.default.createElement(StatusItem, { key: idx, service: item.service, info: item.info });
-                })
+                );
+            }
+            return _react2.default.createElement(
+                'div',
+                null,
+                'Empty matrix'
             );
         }
     }]);
@@ -9883,24 +9948,25 @@ var StatusList = function (_React$PureComponent) {
     return StatusList;
 }(_react2.default.PureComponent);
 
-var StatusItem = function (_React$PureComponent2) {
-    _inherits(StatusItem, _React$PureComponent2);
+var ServiceRow = function (_React$PureComponent2) {
+    _inherits(ServiceRow, _React$PureComponent2);
 
-    function StatusItem(props) {
-        _classCallCheck(this, StatusItem);
+    function ServiceRow(props) {
+        _classCallCheck(this, ServiceRow);
 
-        var _this4 = _possibleConstructorReturn(this, (StatusItem.__proto__ || Object.getPrototypeOf(StatusItem)).call(this, props));
+        var _this4 = _possibleConstructorReturn(this, (ServiceRow.__proto__ || Object.getPrototypeOf(ServiceRow)).call(this, props));
 
-        _this4.state = { service: _this4.props.service, info: _this4.props.info };
+        _this4.state = { services: _this4.props.services };
         return _this4;
     }
 
-    _createClass(StatusItem, [{
+    _createClass(ServiceRow, [{
         key: 'render',
         value: function render() {
-            var info = this.props.info;
-            var service = this.props.service;
+            var services = this.props.services;
 
+
+            console.log(services);
 
             if (info.git && info.git.commit) {
                 return _react2.default.createElement(
@@ -9913,18 +9979,18 @@ var StatusItem = function (_React$PureComponent2) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'branch column' },
-                        info.git.branch
+                        { className: 'status column' },
+                        'ACTIVE'
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'commit column' },
-                        info.git.commit.id
+                        { className: 'status column' },
+                        'ACTIVE'
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'time column' },
-                        info.git.commit.time
+                        { className: 'status column' },
+                        'ACTIVE'
                     ),
                     _react2.default.createElement(
                         'div',
@@ -9944,19 +10010,28 @@ var StatusItem = function (_React$PureComponent2) {
                 _react2.default.createElement(
                     'div',
                     { className: 'error column' },
-                    'ERROR: ',
-                    info
+                    'ERROR'
                 ),
                 _react2.default.createElement(
                     'div',
                     { className: 'status column' },
-                    'INACTIVE'
+                    'ACTIVE'
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'status column' },
+                    'ACTIVE'
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'status column' },
+                    'ACTIVE'
                 )
             );
         }
     }]);
 
-    return StatusItem;
+    return ServiceRow;
 }(_react2.default.PureComponent);
 
 (0, _reactDom.render)(_react2.default.createElement(App, null), document.getElementById('root'));
@@ -12446,10 +12521,24 @@ module.exports = onlyChild;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = fetchAPIStatus;
-function fetchAPIStatus() {
+exports.extend = extend;
+exports.fetchAPIStatus = fetchAPIStatus;
+var Sources = exports.Sources = {
+    DEVX: "https://devx.anypoint.mulesoft.com/designcenter/api/v1/info",
+    QAX: "https://qax.anypoint.mulesoft.com/designcenter/api/v1/info",
+    STGX: "https://stgx.anypoint.mulesoft.com/designcenter/api/v1/info"
+};
+
+function extend(obj, src) {
+    Object.keys(src).forEach(function (key) {
+        obj[key] = src[key];
+    });
+    return obj;
+}
+
+function fetchAPIStatus(props) {
     return new Promise(function (resolve, reject) {
-        fetch('https://devx.anypoint.mulesoft.com/designcenter/api/v1/info').then(function (response) {
+        fetch(props).then(function (response) {
             if (response.status !== 200) {
                 console.log('Looks like there was a problem. Status Code: ' + response.status);
                 return;
@@ -12457,7 +12546,6 @@ function fetchAPIStatus() {
 
             // Examine the text in the response  
             response.json().then(function (data) {
-                console.log(data);
                 resolve(data);
             });
         }).catch(function (err) {
@@ -22667,7 +22755,7 @@ exports = module.exports = __webpack_require__(188)(undefined);
 
 
 // module
-exports.push([module.i, "* {\n\tmargin: 0;\n\tpadding: 0;\n    font-family: Verdana, sans-serif;\n    font-size: 16px;\n    font-weight: 300;\n    text-rendering: optimizeLegibility;\n}\n\n.menu{\n    display: flex;\n    flex-direction: column;\n    margin: 20px;\n}\n\n.row{\n    flex-direction: row;\n    width: 100%;\n    display: flex;\n    height: 100px;\n}\n\n.column{\n    align-items: center;\n    display: flex;    \n    margin: 5px;\n}\n\nh1 {\n    font-weight: 300;\n\tletter-spacing: 1px;\n    word-spacing: 3px;\n\tmargin: 0 0 20px 0;\n\tfont-size: 200%;\n}\n\nh2 {\n\tfont-size: 180%;\n\tword-spacing: 2px;\n\ttext-align: center;\n\tmargin-bottom: 30px;\n}\n\nh3 {\n\tfont-size: 110%;\n\tmargin-bottom: 15px;\n}\n\n.service{\n    width: 30%;\n}\n\n.branch{\n    width: 20%;\n}\n\n.commit{\n    width: 20%;\n}\n\n.time{\n    width: 20%;\n}\n\n.status{\n    width: 10%;\n}\n\n.error{\n    width: 60%;\n    background-color: red;\n    justify-content: center;\n}", ""]);
+exports.push([module.i, " * {\n\tmargin: 0;\n\tpadding: 0;\n    font-family: Verdana, sans-serif;\n    font-size: 16px;\n    font-weight: 300;\n    text-rendering: optimizeLegibility;\n}\n\n.menu{\n    display: flex;\n    flex-direction: column;\n    margin: 20px;\n}\n\n.row{\n    flex-direction: row;\n    width: 100%;\n    display: flex;\n    height: 100px;\n}\n\n.column{\n    align-items: center;\n    display: flex;    \n    margin: 5px;\n}\n\nh1 {\n    font-weight: 300;\n\tletter-spacing: 1px;\n    word-spacing: 3px;\n\tmargin: 0 0 20px 0;\n\tfont-size: 200%;\n}\n\nh2 {\n\tfont-size: 180%;\n\tword-spacing: 2px;\n\ttext-align: center;\n\tmargin-bottom: 30px;\n}\n\nh3 {\n\tfont-size: 110%;\n\tmargin-bottom: 15px;\n}\n\n.service{\n    width: 30%;\n}\n\n.branch{\n    width: 20%;\n}\n\n.commit{\n    width: 20%;\n}\n\n.time{\n    width: 20%;\n}\n\n.status{\n    width: 10%;\n}\n\n.error{\n    width: 60%;\n    background-color: red;\n    justify-content: center;\n}", ""]);
 
 // exports
 

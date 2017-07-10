@@ -1,73 +1,141 @@
 import React from 'react';
-import fetchAPIStatus from './utilities';
+import { fetchAPIStatus, extend, Sources } from './utilities';
 import { render } from 'react-dom';
 import "./styles.css";
 
 const App = () => (
     <div>
-        <StatusList/>
+        <StatusList />
     </div>
 );
 
-class StatusList extends React.PureComponent{
-    constructor(props){
+class StatusList extends React.PureComponent {
+    constructor(props) {
         super(props);
-        this.state = { name: this.props.name, data: [] }
+        this.state = { 
+            data: {}
+         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.getData();
         setInterval(() => this.getData(), 10000);
+        this.setState({
+            data: {}
+        })
     }
 
-    getData(){
-        console.log("Getting data");
-        fetchAPIStatus().then((data) => {
-            this.setState({ data });
+    getData() {
+        console.log("Getting data...");
+
+        fetchAPIStatus(Sources.QAX).then((fetchedData) => {
+            console.log("Got QAX");
+            const mappedData = fetchedData.reduce((acc, val) => {
+                const startOfName = val.service.indexOf("://") + 3;
+                const endOfName = val.service.indexOf(".");
+                const res = val.service.substring(startOfName, endOfName);
+
+                acc[res] = {};
+                acc[res]["qax"] = val;
+                return acc;
+            }, {});
+
+            this.extendData(mappedData);
         }).catch();
+
+        fetchAPIStatus(Sources.DEVX).then((fetchedData) => {
+            console.log("Got DEVX");
+            const mappedData = fetchedData.reduce((acc, val) => {
+                const startOfName = val.service.indexOf("://") + 3;
+                const endOfName = val.service.indexOf(".");
+                const res = val.service.substring(startOfName, endOfName);
+
+                acc[res] = {};
+                acc[res]["devx"] = val;
+                return acc;
+            }, {});
+            
+            this.extendData(mappedData);
+        }).catch();
+        
+        fetchAPIStatus(Sources.STGX).then((fetchedData) => {
+            console.log("Got STGX");
+            const mappedData = fetchedData.reduce((acc, val) => {
+                const startOfName = val.service.indexOf("://") + 3;
+                const endOfName = val.service.indexOf(".");
+                const res = val.service.substring(startOfName, endOfName);
+
+                acc[res] = {};
+                acc[res]["stgx"] = val;
+                return acc;
+            }, {});
+
+            this.extendData(mappedData);
+        }).catch();
+        
     }
-
-    render(){
-        return (
-            <div className="menu">
-                <div className="row">
-                        <div className="service column"><h1>SERVICE</h1></div>
-                        <div className="branch column"><h1>BRANCH</h1></div>
-                        <div className="commit column"><h1>COMMIT</h1></div>
-                        <div className="time column"><h1>TIME</h1></div>
-                        <div className="status column"><h1>STATUS</h1></div>
-                </div>
-
-                { this.state.data.map((item, idx) => <StatusItem key={idx} service={item.service} info={item.info}/> )}
-            </div>
-        );
-    }
-}
-
-class StatusItem extends React.PureComponent{
-    constructor(props){
-        super(props);
-        this.state = { service: this.props.service, info: this.props.info }
+    
+    extendData(props){
+        const data = this.state.data;
+        Object.keys(props).forEach(function(key) {
+            if (data[key] == null){
+                data[key] = {};
+            }
+            const test = extend(data[key], props[key])
+            data[key] = test;
+        });
+        this.setState({ data })
+        console.log(JSON.stringify(data));
     }
 
     render() {
-        const { info } = this.props;
-        const { service } = this.props;
+        //console.log('render', this.state.matrix.length);
+
+        if (false) {
+            return (
+                <div className="menu">
+                    <div className="row">
+                        <div className="service column"><h1>Service</h1></div>
+                        <div className="status column"><h1>DEVx</h1></div>
+                        <div className="status column"><h1>QAx</h1></div>
+                        <div className="status column"><h1>STGx</h1></div>
+                        <div className="status column"><h1>PROD</h1></div>
+                    </div>
+                    {/*<ServiceRow services={this.state.matrix}/>*/}
+                </div>
+            );
+        }
+        return (<div>Empty matrix</div>);
+    }
+}
+
+class ServiceRow extends React.PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = { services: this.props.services }
+    }
+
+    render() {
+        const { services } = this.props;
+
+        console.log(services);
 
         if (info.git && info.git.commit) {
             return (<div className="row">
-                        <div className="service column">{ service }</div>
-                        <div className="branch column">{ info.git.branch }</div>
-                        <div className="commit column">{ info.git.commit.id }</div>
-                        <div className="time column">{ info.git.commit.time }</div>
-                        <div className="status column">ACTIVE</div>
-                    </div>);
+                <div className="service column">{service}</div>
+                <div className="status column">ACTIVE</div>
+                <div className="status column">ACTIVE</div>
+                <div className="status column">ACTIVE</div>
+                <div className="status column">ACTIVE</div>
+            </div>);
         }
         return (<div className="row">
-                    <div className="service column">{ service }</div>
-                    <div className="error column">ERROR: { info }</div>
-                    <div className="status column">INACTIVE</div>
-                </div>);
+            <div className="service column">{service}</div>
+            <div className="error column">ERROR</div>
+            <div className="status column">ACTIVE</div>
+            <div className="status column">ACTIVE</div>
+            <div className="status column">ACTIVE</div>
+        </div>);
     };
 }
 
