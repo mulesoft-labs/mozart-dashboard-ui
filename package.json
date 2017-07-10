@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.config.js",
-    "start": "webpack-dev-server"
+    "start": "node ./server"
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +24,8 @@
     "webpack-dev-server": "^2.5.0"
   },
   "dependencies": {
+    "@mulesoft/anypoint-icons": "^4.4.2",
+    "@mulesoft/anypoint-styles": "^2.4.5",
     "classnames": "^2.2.5",
     "lodash": "^4.17.4",
     "react": "^15.6.1",

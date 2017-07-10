@@ -3,6 +3,8 @@ import { fetchAPIStatus, Sources } from './utilities';
 import { render } from 'react-dom';
 import { assign } from 'lodash/assign';
 import "./styles.css";
+import Icon from '@mulesoft/anypoint-icons/lib/Icon';
+import '@mulesoft/anypoint-styles/anypoint-styles.css';
 
 const App = () => (
     <div>
@@ -28,8 +30,8 @@ class StatusList extends React.PureComponent {
 
     getData() {
         console.log("Getting data...");
+        //this.fetchEnvironmentData(Sources.DEVX);
         this.fetchEnvironmentData(Sources.QAX);
-        this.fetchEnvironmentData(Sources.DEVX);
         this.fetchEnvironmentData(Sources.STGX);
     }
 
@@ -37,7 +39,8 @@ class StatusList extends React.PureComponent {
         fetchAPIStatus(props.url).then((fetchedData) => {
             console.log("Got " + props.name);
             const mappedData = fetchedData.reduce((acc, val) => {
-                const startOfName = val.service.indexOf("://") + 3;
+                const stringToSkipFrom = "://";
+                const startOfName = val.service.indexOf(stringToSkipFrom) + stringToSkipFrom.length;
                 const endOfName = val.service.indexOf(".");
                 const res = val.service.substring(startOfName, endOfName);
 
@@ -72,10 +75,10 @@ class StatusList extends React.PureComponent {
             return (
                 <div className="menu">
                     <div className="row">
-                        <div className="service column"><h1>Service</h1></div>
-                        <div className="status column"><h1>DEVx</h1></div>
-                        <div className="status column"><h1>QAx</h1></div>
-                        <div className="status column"><h1>STGx</h1></div>
+                        <div className="title service-header"><h1>Service</h1></div>
+                        <div className="title environment-header"><h1>DEVx</h1></div>
+                        <div className="title environment-header"><h1>QAx</h1></div>
+                        <div className="title environment-header"><h1>STGx</h1></div>
                     </div>
                     { rows }
                 </div>
@@ -99,17 +102,50 @@ class ServiceRow extends React.PureComponent {
         if (!keys.length) { return <div>EMPTY</div>; }
 
         // TODO: what if didnt fetch particular environment? shouldnt be UP nor DOWN
-        return (<div>
-                    <div className="column"> { this.state.name } </div>
+        return (<div className="row">
+                    <div className="service-name"> { this.state.name } </div>
                         { (data[Sources.DEVX.name] && !data[Sources.DEVX.name].info.git) ?
-                                <div className="column" key={ Sources.DEVX.name }>DEVx is DOWN</div> :
-                                <div className="column" key={ Sources.DEVX.name }>DEVx is UP</div>}
+                                <div className="status down" key={ Sources.DEVX.name }>
+                                    <div className="icon">
+                                        <Icon name="close" size="m"/>
+                                        </div>
+                                    </div> :
+
+                                        (data[Sources.DEVX.name]) ? 
+                                            <div className="status up" key={ Sources.DEVX.name }>
+                                                <div className="icon">
+                                                    <Icon name="check" size="m"/>
+                                                    </div>
+                                                </div> :
+                                            <div className="status unknown" key={ Sources.DEVX.name }>
+                                                <div className="icon">
+                                                    <Icon name="support-small" size="m"/>
+                                                    </div>
+                                                </div> 
+                                                
+                                                 }
                         { (data[Sources.QAX.name] && !data[Sources.QAX.name].info.git) ?
-                                <div className="column" key={ Sources.QAX.name }>QAx is DOWN</div> :
-                                <div className="column" key={ Sources.QAX.name }>QAx is UP</div> }
+                                <div className="status down" key={ Sources.QAX.name }>
+                                    <div className="icon">
+                                        <Icon name="close" size="m"/>
+                                        </div>
+                                    </div> :
+                                <div className="status up" key={ Sources.QAX.name }>
+                                    <div className="icon">
+                                        <Icon name="check" size="m"/>
+                                        </div>
+                                    </div> }
                         { (data[Sources.STGX.name] && !data[Sources.STGX.name].info.git) ?
-                                <div className="column" key={ Sources.STGX.name }>STGx is DOWN</div> :
-                                <div className="column" key={ Sources.STGX.name }>STGx is UP</div> }
+                                <div className="status down" key={ Sources.STGX.name }>
+                                    <div className="icon">
+                                        <Icon name="close" size="m"/>
+                                        </div>
+                                    </div> :
+                                <div className="status up" key={ Sources.STGX.name }>
+                                    <div className="icon">
+                                        <Icon name="check" size="m"/>
+                                        </div>
+                                    </div> }
                 </div>);
         
     };

@@ -16,12 +16,6 @@ module.exports = {
     extensions: ['.js']
   },
 
-  devServer: {
-    contentBase: path.join(__dirname, "build"),
-    compress: true,
-    port: 9001
-  },
-
   module: {
     rules: [
       { 
