@@ -1,16 +1,30 @@
 export var Sources = {
     DEVX : {
         url: "https://devx.anypoint.mulesoft.com/designcenter/api/v1/info",
-        name: "devx"
+        name: "devx",
+        stylizedName: "DEVx"
     },
     QAX : {
         url: "https://qax.anypoint.mulesoft.com/designcenter/api/v1/info",
-        name: "qax"
+        name: "qax",
+        stylizedName: "QAx"
     },
     STGX : {
         url: "https://stgx.anypoint.mulesoft.com/designcenter/api/v1/info",
-        name: "stgx"
+        name: "stgx",
+        stylizedName: "STGx"
+    },
+    PROD : {
+        url: "https://anypoint.mulesoft.com/designcenter/api/v1/info",
+        name: "prod",
+        stylizedName: "PROD"
     }
+}
+
+export var Status = {
+    ACTIVE: "active",
+    INACTIVE: "inactive",
+    UNKNOWN: "unknown"
 }
 
 export function fetchAPIStatus(props){

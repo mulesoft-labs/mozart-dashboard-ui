@@ -40,7 +40,6 @@ h1 {
     color: #fff;
     align-items: center;
     display: flex;
-    padding-top: 20px;
 }
 
 .service-header{
@@ -48,6 +47,7 @@ h1 {
     padding-left: 25px;
     margin-left: 5px;
     display: inline-block;
+    padding-top: 25px;
 }
 
 .service-name{
@@ -74,7 +74,7 @@ h1 {
     margin: 5px 5px 0 0;
     display: flex;
     vertical-align: middle;
-    padding-top: 15px;
+    padding-top: 20px;
     justify-content: center;
 }
 
@@ -95,4 +95,27 @@ h1 {
 
 .icon{
     transform: scale(0.75);
+}
+
+.general-status-inactive{
+    background-color: #c8324a;
+    height: 15px;
+    margin-bottom: 10px;
+}
+
+.general-status-active{
+    background-color: #4eb35e;
+    height: 15px;
+    margin-bottom: 10px;
+}
+
+.general-status-unknown{
+    background-color: #525252;
+    height: 15px;
+    margin-bottom: 10px;
+}
+
+.timestamp{
+    color: #fff;
+    font-size: 30px;
 }
