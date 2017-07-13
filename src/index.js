@@ -160,7 +160,6 @@ class StatusList extends React.PureComponent {
                             <Button/>
                         </div>
                     </div>
-                    <Line percent={this.state.progress} strokeWidth="0.75" strokeLinecap="square" strokeColor="#00A0DF" trailColor="#141414"/>
                 </div>
             );
         }
