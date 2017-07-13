@@ -107,7 +107,7 @@ h1 {
 }
 
 .down{
-    background-color: #c8324a;
+    background-color: #832131;
     fill: #fff;
 }
 
@@ -121,13 +121,13 @@ h1 {
 }
 
 .general-status-inactive{
-    background-color: #c8324a;
+    background-color: #832131;
     height: 15px;
     margin-bottom: 10px;
 }
 
 .general-status-active{
-    background-color: #4eb35e;
+    background-color: #296533;
     height: 15px;
     margin-bottom: 10px;
 }
