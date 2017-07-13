@@ -1,1 +1,1 @@
-Build a UI for the /info endpoint
+https://mulesoft-labs.github.io/mozart-dashboard-ui/
