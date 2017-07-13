@@ -8,19 +8,12 @@ module.exports = {
   entry: ['./index.js'],
 
   output: {
-    path: path.join(rootPath, 'build'),
-    filename: 'bundle.js',
-    libraryTarget: 'commonjs2'
+    path: path.join(rootPath, 'docs'),
+    filename: 'bundle.js'
   },
 
   resolve: {
     extensions: ['.js']
-  },
-
-  devServer: {
-    contentBase: path.join(__dirname, "dist"),
-    compress: true,
-    port: 9000
   },
 
   module: {
@@ -29,13 +22,24 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: "babel-loader"
+      },
+      {
+        test: /\.css$/,
+        loader: "style-loader!css-loader"
       }
     ]
   },
 
   plugins: [
     new webpack.NoEmitOnErrorsPlugin()
-  ],
+  ].concat(process.env.NODE_ENV === 'production' ? 
+  [
+    new webpack.optimize.UglifyJsPlugin({
+        compress: {
+            warnings: false
+        }
+    })
+  ] : []),
 
-  watch: true
+  //watch: true
 };

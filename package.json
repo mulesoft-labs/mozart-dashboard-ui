@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config webpack.config.js",
-    "start": "node build/bundle.js && webpack-dev-server"
+    "build": "NODE_ENV=production webpack --config webpack.config.js",
+    "start": "node ./server"
   },
   "author": "",
   "license": "ISC",
@@ -14,13 +14,22 @@
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.1",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "css-loader": "^0.28.4",
+    "style-loader": "^0.18.2",
     "webpack": "^3.0.0",
     "webpack-dev-server": "^2.5.0"
   },
   "dependencies": {
+    "@mulesoft/anypoint-icons": "^4.4.2",
+    "@mulesoft/anypoint-styles": "^2.4.5",
+    "classnames": "^2.2.5",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "rc-progress": "^2.2.1",
     "react": "^15.6.1",
     "react-dom": "^15.6.1"
   }
