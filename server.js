@@ -5,7 +5,7 @@ var proxy = require('http-proxy-middleware');
 var config = require("./webpack.config.js");
 var compiler = webpack(config);
 var server = new WebpackDevServer(compiler, {
-    contentBase: path.join(__dirname, "build"),
+    contentBase: path.join(__dirname, "docs"),
     compress: true,
     port: 9001
   });

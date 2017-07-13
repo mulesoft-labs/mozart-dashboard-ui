@@ -93,14 +93,14 @@ class StatusList extends React.PureComponent {
             const keyToAdd = Object.keys(props[key])[0];
 
             if (data[key] && data[key][keyToAdd]){
-                const currentObject = JSON.stringify(_.omit(data[key][keyToAdd], 'lastChange'));
+                const currentObject = JSON.stringify(_.omit(data[key][keyToAdd], 'lastTimestamp'));
                 const objectToAdd = JSON.stringify(props[key][keyToAdd]);
 
-                // increments time or resets timer to 0
-                props[key][keyToAdd]["lastChange"] = objectToAdd == currentObject ? data[key][keyToAdd]["lastChange"] + (Interval / 1000) : 0;
+                // leaves timestamp or updates with current timestamp
+                props[key][keyToAdd]["lastTimestamp"] = objectToAdd == currentObject ? data[key][keyToAdd]["lastTimestamp"] : timeStamp;
             } else {
-                // initializes lastChange with 0
-                props[key][keyToAdd]["lastChange"] = 0;
+                // sets current timestmap
+                props[key][keyToAdd]["lastTimestamp"] = timeStamp;
             }
             data = { ...data, [key]: { ...data[key], ...props[key] }};
         });
@@ -213,8 +213,9 @@ class ServiceTimestamp extends React.PureComponent{
 
     render(){
         const data = this.props.data;
-        if (data && data.lastChange){
-            return (<div className="timestamp">{  humanizeTime(data.lastChange) }</div>);
+        var timeStamp = Math.floor(Date.now() / 1000);
+        if (data && data.lastTimestamp){
+            return (<div className="timestamp">{ humanizeTime(timeStamp - data.lastTimestamp) }</div>);
         }
         return (<div className="timestamp">{ humanizeTime(0) }</div>);
     }
