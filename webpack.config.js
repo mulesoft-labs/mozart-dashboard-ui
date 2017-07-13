@@ -8,7 +8,7 @@ module.exports = {
   entry: ['./index.js'],
 
   output: {
-    path: path.join(rootPath, 'build'),
+    path: path.join(rootPath, 'docs'),
     filename: 'bundle.js'
   },
 
@@ -32,7 +32,14 @@ module.exports = {
 
   plugins: [
     new webpack.NoEmitOnErrorsPlugin()
-  ],
+  ].concat(process.env.NODE_ENV === 'production' ? 
+  [
+    new webpack.optimize.UglifyJsPlugin({
+        compress: {
+            warnings: false
+        }
+    })
+  ] : []),
 
-  watch: true
+  //watch: true
 };
