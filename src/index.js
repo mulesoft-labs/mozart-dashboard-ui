@@ -16,7 +16,7 @@ const App = () => (
     </div>
 );
 
-const timeout = (name) => new Promise(resolve => setTimeout(() => resolve({ env: name, success: false, data: null }), Interval + 30000))
+const timeout = (name) => new Promise(resolve => setTimeout(() => resolve({ env: name, success: false, data: null }), Interval + 40000))
 
 class StatusList extends React.PureComponent {
     constructor(props) {
