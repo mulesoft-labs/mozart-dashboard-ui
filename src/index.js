@@ -16,7 +16,7 @@ const App = () => (
     </div>
 );
 
-const timeout = (name) => new Promise(resolve => setTimeout(() => resolve({ env: name, success: false, data: null }), Interval + 1000))
+const timeout = (name) => new Promise(resolve => setTimeout(() => resolve({ env: name, success: false, data: null }), Interval + 30000))
 
 class StatusList extends React.PureComponent {
     constructor(props) {
@@ -126,7 +126,6 @@ class StatusList extends React.PureComponent {
     }
 
     render() {
-        console.log("Renders");
         if (this.state.data != null) {
 
             // generates ServiceRow
