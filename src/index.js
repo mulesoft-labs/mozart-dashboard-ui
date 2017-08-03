@@ -8,7 +8,7 @@ import "./styles.css";
 import Icon from '@mulesoft/anypoint-icons/lib/Icon';
 import '@mulesoft/anypoint-styles/anypoint-styles.css';
 
-const Interval = 5000;
+const Interval = 40000;
 
 const App = () => (
     <div>
@@ -16,7 +16,7 @@ const App = () => (
     </div>
 );
 
-const timeout = (name) => new Promise(resolve => setTimeout(() => resolve({ env: name, success: false, data: null }), Interval + 40000))
+const timeout = (name) => new Promise(resolve => setTimeout(() => resolve({ env: name, success: false, data: null }), Interval))
 
 class StatusList extends React.PureComponent {
     constructor(props) {
