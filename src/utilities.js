@@ -18,7 +18,12 @@ export var Sources = {
         url: "https://anypoint.mulesoft.com/designcenter/api/v1/info",
         name: "prod",
         stylizedName: "PROD"
-    }
+    },
+    EU : {
+        url: "https://eu1.anypoint.mulesoft.com/designcenter/api/v1/info",
+        name: "eu",
+        stylizedName: "EU"
+    },
 }
 
 export var Status = {

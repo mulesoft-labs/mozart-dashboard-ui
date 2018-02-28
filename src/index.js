@@ -50,6 +50,7 @@ class StatusList extends React.PureComponent {
         this.fetchEnvironmentData(Sources.QAX);
         this.fetchEnvironmentData(Sources.STGX);
         this.fetchEnvironmentData(Sources.PROD);
+        this.fetchEnvironmentData(Sources.EU);
         this.setState({ progress: 0 });
     }
 
@@ -130,10 +131,9 @@ class StatusList extends React.PureComponent {
 
             // generates ServiceRow
             var rows = [];
-            var devxStatus = Status.UNKNOWN; var qaxStatus = Status.UNKNOWN; var stgxStatus = Status.UNKNOWN; var prodStatus = Status.UNKNOWN;
+            var devxStatus = Status.UNKNOWN; var qaxStatus = Status.UNKNOWN; var stgxStatus = Status.UNKNOWN; var prodStatus = Status.UNKNOWN; var euStatus = Status.UNKNOWN;
 
             Object.keys(this.state.data).forEach((key) => {
-
                 const serviceStatus = this.state.data[key];
                 rows.push(<ServiceRow key={key} data={serviceStatus} name={key}/>);
 
@@ -141,7 +141,7 @@ class StatusList extends React.PureComponent {
                 qaxStatus = this.getEnvironmentStatus(serviceStatus[Sources.QAX.name], qaxStatus);
                 stgxStatus = this.getEnvironmentStatus(serviceStatus[Sources.STGX.name], stgxStatus);
                 prodStatus = this.getEnvironmentStatus(serviceStatus[Sources.PROD.name], prodStatus);
-
+                euStatus = this.getEnvironmentStatus(serviceStatus[Sources.EU.name], euStatus);
             });
             
             return (
@@ -153,6 +153,7 @@ class StatusList extends React.PureComponent {
                             <EnvironmentHeader name={ Sources.QAX.stylizedName } status={ qaxStatus }/>
                             <EnvironmentHeader name={ Sources.STGX.stylizedName } status={ stgxStatus }/>
                             <EnvironmentHeader name={ Sources.PROD.stylizedName } status={ prodStatus }/>
+                            <EnvironmentHeader name={ Sources.EU.stylizedName } status={ euStatus }/>
                         </div>
                         { rows }
                         <div className="row button">
@@ -306,7 +307,25 @@ class ServiceRow extends React.PureComponent {
                                                 </div>
                                             </div> 
                                                 
-                        }
+                        }{ (data[Sources.EU.name] && data[Sources.EU.name].info && !data[Sources.EU.name].info.git) ?
+                            <div className="status down" key={ Sources.EU.name }>
+                                <div className="icon">
+                                    <ServiceTimestamp data={data[Sources.EU.name]}/>
+                                    </div>
+                                </div> :
+                                (data[Sources.EU.name] && data[Sources.EU.name].info) ? 
+                                    <div className="status up" key={ Sources.EU.name }>
+                                        <div className="icon">
+                                            <ServiceTimestamp data={data[Sources.EU.name]}/>
+                                            </div>
+                                        </div> :
+                                    <div className="status unknown" key={ Sources.EU.name }>
+                                        <div className="icon">
+                                            <ServiceTimestamp data={data[Sources.EU.name]}/>
+                                            </div>
+                                        </div> 
+                                            
+                    }
                 </div>);
         
     };
